@@ -1,6 +1,30 @@
 package deque;
 
 public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
+    private NodeObject[] itemArray;
+    private int begin, end;
+    private int arraySize;
+
+    public ArrayDeque() {
+        arraySize = 10;
+        itemArray = (NodeObject[]) new Object[arraySize * 3];
+        begin = end = arraySize;
+    }
+
+    /**
+     * Resize the array of the array list.
+     *
+     * @param newArraySize an integer that the minimum size of the array.
+     */
+    private void resize(int newArraySize) {
+        arraySize = newArraySize;
+        NodeObject[] newItemArray = (NodeObject[]) new Object[newArraySize * 3];
+        int size = this.size();
+        System.arraycopy(itemArray, begin, newItemArray, newArraySize, size);
+        begin = newArraySize;
+        end = newArraySize + size;
+        itemArray = newItemArray;
+    }
 
     /**
      * Adds an element to the beginning of the deque.
@@ -9,7 +33,11 @@ public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public void addFirst(NodeObject item) {
-
+        if (begin == 0) {
+            resize(this.size());
+        }
+        begin--;
+        itemArray[begin] = item;
     }
 
     /**
@@ -19,7 +47,11 @@ public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public void addLast(NodeObject item) {
-
+        if (end == itemArray.length - 1) {
+            resize(this.size());
+        }
+        itemArray[end] = item;
+        end++;
     }
 
     /**
@@ -29,7 +61,7 @@ public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        return this.size() == 0;
     }
 
     /**
@@ -39,7 +71,7 @@ public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public int size() {
-        return 0;
+        return end - begin;
     }
 
     /**
@@ -47,7 +79,10 @@ public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public void printDeque() {
-
+        for (int i = begin; i < end; ++i) {
+            System.out.print(itemArray[i] + " ");
+        }
+        System.out.println();
     }
 
     /**
@@ -57,7 +92,10 @@ public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public NodeObject removeFirst() {
-        return null;
+        if (this.isEmpty()) {
+            return null;
+        }
+        return itemArray[begin++];
     }
 
     /**
@@ -67,7 +105,10 @@ public class ArrayDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public NodeObject removeLast() {
-        return null;
+        if (this.isEmpty()) {
+            return null;
+        }
+        return itemArray[--end];
     }
 
     /**
