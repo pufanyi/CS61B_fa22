@@ -146,8 +146,7 @@ public class LinkedListDeque<NodeObject> implements Deque<NodeObject> {
      */
     @Override
     public NodeObject removeFirst() {
-        NodeObject now = remove(sentinel.next);
-        return now;
+        return remove(sentinel.next);
     }
 
     /**
